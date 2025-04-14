@@ -6,6 +6,9 @@ const formatPath = (path: string) =>
 
 export default function Breadcrumb() {
   const location = useLocation();
+
+  console.log(location);
+
   const paths = location.pathname.split('/').filter(Boolean);
   const items = [
     { title: <Link to="/">Home</Link> },
