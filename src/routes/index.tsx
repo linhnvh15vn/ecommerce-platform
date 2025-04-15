@@ -1,3 +1,5 @@
+import { lazy } from 'react';
+
 import {
   DashboardOutlined,
   ProductOutlined,
@@ -5,11 +7,16 @@ import {
   TagOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { lazy } from 'react';
 
 const ProductList = lazy(() => import('@/modules/products/pages/product-list'));
 const ProductDetail = lazy(
   () => import('@/modules/products/pages/product-detail'),
+);
+const CollectionList = lazy(
+  () => import('@/modules/collections/pages/collection-list'),
+);
+const CollectionDetail = lazy(
+  () => import('@/modules/collections/pages/collection-detail'),
 );
 
 export const publicRoutes = [
@@ -51,11 +58,17 @@ export const protectedRoutes = [
   {
     path: '/collections',
     label: 'Collections',
-    element: <div>COLLECTIONS</div>,
+    icon: <ShoppingCartOutlined />,
+    element: <CollectionList />,
+  },
+  {
+    path: '/collections/:id',
+    element: <CollectionDetail />,
   },
   {
     path: '/types',
     label: 'Types',
+    icon: <ShoppingCartOutlined />,
     element: <div>TYPES</div>,
   },
   {
