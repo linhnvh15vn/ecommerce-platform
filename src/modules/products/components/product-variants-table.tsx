@@ -1,7 +1,8 @@
-import { DATE_FORMAT } from '@/constants';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Card, Divider, Space, Table, TableColumnsType } from 'antd';
 import dayjs from 'dayjs';
+
+import { DATE_FORMAT } from '@/constants';
 
 type ProductVariantsTableProps = {
   data: any[];

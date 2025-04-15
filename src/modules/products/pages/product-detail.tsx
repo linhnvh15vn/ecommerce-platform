@@ -1,12 +1,16 @@
-import ProductAttributes from '@/modules/products/components/product-attributes';
-import ProductInfo from '@/modules/products/components/product-info';
-import ProductMedia from '@/modules/products/components/product-media';
-import ProductOptions from '@/modules/products/components/product-options';
-import ProductOrganize from '@/modules/products/components/product-organize';
-import ProductVariantsTable from '@/modules/products/components/product-variants-table';
-import { Col, Flex, Row } from 'antd';
 import { useMemo } from 'react';
+
+import { Col, Flex, Row } from 'antd';
 import { useParams } from 'react-router';
+
+import {
+  ProductAttributes,
+  ProductInfo,
+  ProductMedia,
+  ProductOptions,
+  ProductOrganize,
+  ProductVariantsTable,
+} from '@/modules/products/components';
 
 export default function ProductDetail() {
   const params = useParams();

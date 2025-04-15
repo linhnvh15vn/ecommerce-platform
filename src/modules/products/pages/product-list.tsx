@@ -1,7 +1,6 @@
 import { Flex } from 'antd';
 
-import ProductFilter from '@/modules/products/components/product-filter';
-import ProductTable from '@/modules/products/components/product-table';
+import { ProductFilter, ProductTable } from '@/modules/products/components';
 
 export default function ProductList() {
   const data = [
