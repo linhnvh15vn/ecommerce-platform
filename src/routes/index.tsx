@@ -24,6 +24,14 @@ const CollectionList = lazy(
 const CollectionDetail = lazy(
   () => import('@/modules/collections/pages/collection-detail'),
 );
+const ProductTypeList = lazy(
+  () => import('@/modules/product-types/pages/product-type-list'),
+);
+const ProductTypeDetail = lazy(
+  () => import('@/modules/product-types/pages/product-type-detail'),
+);
+const TagList = lazy(() => import('@/modules/tags/pages/tag-list'));
+const TagDetail = lazy(() => import('@/modules/tags/pages/tag-detail'));
 const PromotionList = lazy(
   () => import('@/modules/promotions/pages/promotion-list'),
 );
@@ -85,7 +93,21 @@ export const protectedRoutes = [
     path: '/types',
     label: 'Types',
     icon: <ShoppingCartOutlined />,
-    element: <div>TYPES</div>,
+    element: <ProductTypeList />,
+  },
+  {
+    path: '/types/:id',
+    element: <ProductTypeDetail />,
+  },
+  {
+    path: '/tags',
+    label: 'Tags',
+    icon: <ShoppingCartOutlined />,
+    element: <TagList />,
+  },
+  {
+    path: '/tags/:id',
+    element: <TagDetail />,
   },
   {
     path: '/customers',
