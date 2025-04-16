@@ -24,6 +24,12 @@ const CollectionList = lazy(
 const CollectionDetail = lazy(
   () => import('@/modules/collections/pages/collection-detail'),
 );
+const PromotionList = lazy(
+  () => import('@/modules/promotions/pages/promotion-list'),
+);
+const PromotionDetail = lazy(
+  () => import('@/modules/promotions/pages/promotion-detail'),
+);
 
 export const publicRoutes = [
   {
@@ -91,6 +97,10 @@ export const protectedRoutes = [
     path: '/promotions',
     label: 'Promotions',
     icon: <TagOutlined />,
-    element: <div>PROMOTIONS</div>,
+    element: <PromotionList />,
+  },
+  {
+    path: '/promotions/:id',
+    element: <PromotionDetail />,
   },
 ];
