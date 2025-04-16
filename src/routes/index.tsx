@@ -12,6 +12,12 @@ const ProductList = lazy(() => import('@/modules/products/pages/product-list'));
 const ProductDetail = lazy(
   () => import('@/modules/products/pages/product-detail'),
 );
+const CategoryList = lazy(
+  () => import('@/modules/categories/pages/category-list'),
+);
+const CategoryDetail = lazy(
+  () => import('@/modules/categories/pages/category-detail'),
+);
 const CollectionList = lazy(
   () => import('@/modules/collections/pages/collection-list'),
 );
@@ -53,7 +59,11 @@ export const protectedRoutes = [
     path: '/categories',
     label: 'Categories',
     icon: <ShoppingCartOutlined />,
-    element: <div>CATEGORIES</div>,
+    element: <CategoryList />,
+  },
+  {
+    path: '/categories/:id',
+    element: <CategoryDetail />,
   },
   {
     path: '/collections',
