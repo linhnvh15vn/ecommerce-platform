@@ -6,11 +6,15 @@ import { Link } from 'react-router';
 
 export default function Sider() {
   const collapsed = useGlobalStore((state) => state.collapsed);
-  const items: MenuProps['items'] = protectedRoutes.map((route) => ({
-    key: route.path,
-    label: <Link to={route.path}>{route.label}</Link>,
-    icon: route.icon,
-  }));
+  const items: MenuProps['items'] = protectedRoutes.map((route) =>
+    route.label
+      ? {
+          key: route.path,
+          label: <Link to={route.path}>{route.label}</Link>,
+          icon: route.icon,
+        }
+      : null,
+  );
 
   return (
     <Layout.Sider

@@ -1,3 +1,5 @@
+import CategoryDetail from '@/modules/categories/category-detail';
+import CategoryList from '@/modules/categories/category-list';
 import { DashboardOutlined } from '@ant-design/icons';
 
 export const protectedRoutes = [
@@ -27,9 +29,13 @@ export const protectedRoutes = [
   },
   {
     path: '/categories',
-    label: 'Component 4',
+    label: 'Categories',
     icon: <DashboardOutlined />,
-    element: <div>COMPONENT 4</div>,
+    element: <CategoryList />,
+  },
+  {
+    path: '/categories/:id',
+    element: <CategoryDetail />,
   },
   {
     path: '/types',
