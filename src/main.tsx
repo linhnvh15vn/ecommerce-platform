@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { App as AntApp } from 'antd';
 import { BrowserRouter } from 'react-router';
 
+import ConfigProvider from '@/components/providers/config-provider';
 import App from './App.tsx';
 import './index.css';
 
@@ -15,9 +16,11 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <AntApp>
-          <App />
-        </AntApp>
+        <ConfigProvider>
+          <AntApp>
+            <App />
+          </AntApp>
+        </ConfigProvider>
       </BrowserRouter>
       <ReactQueryDevtools />
     </QueryClientProvider>

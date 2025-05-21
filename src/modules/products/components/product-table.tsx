@@ -1,16 +1,129 @@
+import {
+  App,
+  Button,
+  Card,
+  Divider,
+  Space,
+  Table,
+  type TableProps,
+} from 'antd';
+import dayjs from 'dayjs';
+
+import { DATE_FORMAT, PAGE_SIZE_OPTIONS } from '@/constants';
+import CreateProductModal from '@/modules/products/components/create-product-modal';
 import type { Product } from '@/modules/products/types/product.type';
-import { Card, Table, type TableProps } from 'antd';
+import { useBoolean } from '@/shared/hooks/use-boolean';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { useState, type Key } from 'react';
+import { useNavigate } from 'react-router';
 
 type ProductTableProps = {
   data: Product[];
+  isLoading: boolean;
+  total: number;
+  pageSize: number;
+  onPageChange: (pageIndex: number, itemsPerPage: number) => void;
+  onSearchChange: (value: string) => void;
 };
 
-export default function ProductTable({ data }: ProductTableProps) {
-  const columns: TableProps<Product>['columns'] = [{}];
+export default function ProductTable({
+  data,
+  isLoading,
+  total,
+  pageSize,
+  onPageChange,
+}: ProductTableProps) {
+  const { modal } = App.useApp();
+  const navigate = useNavigate();
+  const { value, setTrue, setFalse } = useBoolean(false);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
+  const columns: TableProps<Product>['columns'] = [
+    {
+      title: 'Product',
+      dataIndex: 'title',
+    },
+    {
+      title: 'Collection',
+      dataIndex: 'collection',
+      render: (value) => (value ? value.title : '-'),
+    },
+    {
+      title: 'Category',
+      dataIndex: 'category',
+      render: (value) => (value ? value.title : '-'),
+    },
+    {
+      title: 'Variants',
+      dataIndex: 'variants',
+      render: (value) => value.length,
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+    },
+    {
+      title: 'Created',
+      dataIndex: 'created_at',
+      render: (value) => dayjs(value).format(DATE_FORMAT),
+    },
+    {
+      title: 'Updated',
+      dataIndex: 'updated_at',
+      render: (value) => dayjs(value).format(DATE_FORMAT),
+    },
+    {
+      align: 'end',
+      render: (_, record) => (
+        <Space split={<Divider type="vertical" />}>
+          <Button type="link" icon={<EditOutlined />} />
+          <Button
+            type="link"
+            icon={<DeleteOutlined />}
+            onClick={(e) => {
+              e.stopPropagation();
+              modal.confirm({
+                title: 'Are you sure?',
+                content: `You are about to delete the product ${record.title}. This action cannot be undone.`,
+                // onOk: () => mutate(record.id),
+              });
+            }}
+          />
+        </Space>
+      ),
+    },
+  ];
 
   return (
-    <Card title="Products">
-      <Table columns={columns} dataSource={data} />
+    <Card
+      title="Products"
+      extra={
+        <Button type="primary" onClick={setTrue}>
+          Create
+        </Button>
+      }
+    >
+      <Table
+        columns={columns}
+        dataSource={data}
+        loading={isLoading}
+        rowSelection={{
+          selectedRowKeys,
+          onChange: (keys) => setSelectedRowKeys(keys),
+        }}
+        onRow={(data) => ({
+          onClick: () => navigate(`/products/${data.id}`),
+        })}
+        pagination={{
+          onChange: (page, pageSize) => onPageChange(page, pageSize),
+          total,
+          pageSize,
+          pageSizeOptions: PAGE_SIZE_OPTIONS,
+          showSizeChanger: true,
+          showTotal: (total, range) =>
+            `${range[0]} - ${range[1]} of ${total} results`,
+        }}
+      />
+      <CreateProductModal open={value} onCancel={setFalse} />
     </Card>
   );
 }

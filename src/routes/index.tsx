@@ -1,6 +1,11 @@
+import { DashboardOutlined, ProductOutlined } from '@ant-design/icons';
+
 import CategoryDetail from '@/modules/categories/category-detail';
 import CategoryList from '@/modules/categories/category-list';
-import { DashboardOutlined } from '@ant-design/icons';
+import CreateProduct from '@/modules/products/create-product';
+import ProductCreate from '@/modules/products/product-create';
+import ProductDetail from '@/modules/products/product-detail';
+import ProductList from '@/modules/products/product-list';
 
 export const protectedRoutes = [
   {
@@ -17,9 +22,17 @@ export const protectedRoutes = [
   },
   {
     path: '/products',
-    label: 'Component 2',
-    icon: <DashboardOutlined />,
-    element: <div>COMPONENT 2</div>,
+    label: 'Products',
+    icon: <ProductOutlined />,
+    element: <ProductList />,
+  },
+  {
+    path: '/products/create',
+    element: <CreateProduct />,
+  },
+  {
+    path: '/products/:id',
+    element: <ProductDetail />,
   },
   {
     path: '/collections',

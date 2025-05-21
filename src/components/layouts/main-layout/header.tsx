@@ -12,6 +12,9 @@ export default function Header() {
   return (
     <Layout.Header
       style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 1,
         padding: 0,
         background: token.colorBgContainer,
         display: 'flex',
