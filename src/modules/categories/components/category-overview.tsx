@@ -1,10 +1,10 @@
 import {
+  type DescriptionsProps,
   Button,
   Card,
   Descriptions,
   Space,
   Tag,
-  type DescriptionsProps,
 } from 'antd';
 
 import type { Category } from '@/modules/categories/types/category.type';

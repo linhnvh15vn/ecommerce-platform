@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
+import { type DescriptionsProps, Button, Card, Descriptions } from 'antd';
+
 import UpdateProductAttributeDrawer from '@/modules/products/components/update-product-attribute-drawer';
-import { Button, Card, Descriptions, type DescriptionsProps } from 'antd';
 
 type ProductAttributeProps = {
   weight: number;

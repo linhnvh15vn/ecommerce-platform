@@ -1,7 +1,8 @@
-import { useState, type Key } from 'react';
+import { type Key, useState } from 'react';
 
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import {
+  type TableProps,
   App,
   Button,
   Card,
@@ -11,7 +12,6 @@ import {
   Space,
   Table,
   Tag,
-  type TableProps,
 } from 'antd';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router';
@@ -20,6 +20,7 @@ import { DATE_FORMAT, PAGE_SIZE_OPTIONS } from '@/constants';
 import { useDeleteCategory } from '@/modules/categories/api/use-delete-category';
 import { useDeleteManyCategory } from '@/modules/categories/api/use-delete-many-category';
 import CategoryForm from '@/modules/categories/components/category-form';
+
 import type { Category } from '@/modules/categories/types/category.type';
 
 type CategoryTableProps = {
@@ -101,7 +102,7 @@ export default function CategoryTable({
       <Card
         title="Categories"
         extra={
-          <Space split={<Divider type="vertical" />}>
+          <Space>
             <Input.Search
               allowClear
               placeholder="Search categories"

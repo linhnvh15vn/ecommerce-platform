@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { axios } from '@/api/axios.instance';
+
 import type { Product } from '@/modules/products/types/product.type';
 import type { HttpResponse } from '@/types/http.type';
 

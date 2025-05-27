@@ -12,7 +12,7 @@ export default function MainLayout() {
         <Header />
         <Layout.Content
           style={{
-            padding: 24,
+            padding: '24px 48px',
             minHeight: 280,
           }}
         >

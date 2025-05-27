@@ -1,4 +1,4 @@
-import { Card, Descriptions, type DescriptionsProps } from 'antd';
+import { type DescriptionsProps, Card, Descriptions } from 'antd';
 
 import type { Category } from '@/modules/categories/types/category.type';
 

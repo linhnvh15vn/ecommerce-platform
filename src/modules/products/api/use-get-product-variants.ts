@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { axios } from '@/api/axios.instance';
+
 import type { ProductVariant } from '@/modules/products/types/product-variant.type';
 import type { HttpResponse, Paginated } from '@/types/http.type';
 

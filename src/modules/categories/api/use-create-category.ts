@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { App } from 'antd';
 
 import { axios } from '@/api/axios.instance';
+
 import type { CreateCategory } from '@/modules/categories/types/create-category.type';
-import { App } from 'antd';
 
 const createCategory = async (data: CreateCategory) => {
   const response = await axios.post('/categories', data);
@@ -21,3 +22,9 @@ export const useCreateCategory = () => {
     },
   });
 };
+
+export type Test = {};
+
+export type A = {};
+
+export type Z = {};

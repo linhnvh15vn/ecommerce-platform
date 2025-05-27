@@ -1,5 +1,5 @@
-import { useCreateProduct } from '@/modules/products/api/use-create-product';
-import { generateVariants } from '@/modules/products/utils';
+import { useState } from 'react';
+
 import { CloseOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import {
   Affix,
@@ -18,7 +18,9 @@ import {
   Upload,
 } from 'antd';
 import { debounce } from 'lodash';
-import { useState } from 'react';
+
+import { useCreateProduct } from '@/modules/products/api/use-create-product';
+import { generateVariants } from '@/modules/products/utils';
 
 export default function CreateProduct() {
   const [variants, setVariants] = useState();
@@ -42,244 +44,204 @@ export default function CreateProduct() {
   }, 500); // đợi 500ms sau khi dừng nhập
 
   return (
-    <Flex vertical gap={16}>
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={handleFinish}
-        onValuesChange={(changedValues, allValues) => {
-          if ('options' in changedValues) {
-            const options = allValues.options;
-            if (options && Array.isArray(options)) {
-              debouncedGenerate(options);
-            }
+    <Form
+      form={form}
+      layout="vertical"
+      onFinish={handleFinish}
+      onValuesChange={(changedValues, allValues) => {
+        if ('options' in changedValues) {
+          const options = allValues.options;
+          if (options && Array.isArray(options)) {
+            debouncedGenerate(options);
           }
-        }}
-      >
-        <Row gutter={16}>
-          <Col span={18}>
-            <Flex vertical gap={16}>
-              <Card title="General">
-                <Form.Item name="title" label="Title">
-                  <Input />
-                </Form.Item>
-                <Form.Item name="description" label="Description">
-                  <Input.TextArea rows={3} />
-                </Form.Item>
-                <Form.Item name="thumbnail" label="Thumbnail">
-                  <Upload.Dragger multiple>
-                    <Space direction="vertical">
-                      <Space>
-                        <UploadOutlined />
-                        <Typography.Text strong>Upload images</Typography.Text>
-                      </Space>
-                      <Typography.Text type="secondary">
-                        Drag and drop images here or click to upload.
-                      </Typography.Text>
-                    </Space>
-                  </Upload.Dragger>
-                </Form.Item>
-                <Form.Item name="images" label="Media">
-                  <Upload.Dragger multiple>
-                    <Space direction="vertical">
-                      <Space>
-                        <UploadOutlined />
-                        <Typography.Text strong>Upload images</Typography.Text>
-                      </Space>
-                      <Typography.Text type="secondary">
-                        Drag and drop images here or click to upload.
-                      </Typography.Text>
-                    </Space>
-                  </Upload.Dragger>
-                </Form.Item>
-              </Card>
-              <Card title="Options">
-                <Form.List name="options">
-                  {(fields, { add, remove }) => {
-                    addFunc = add;
+        }
+      }}
+    >
+      <Flex vertical gap={16}>
+        <Card title="General">
+          <Form.Item name="title" label="Title">
+            <Input />
+          </Form.Item>
+          <Form.Item name="description" label="Description">
+            <Input.TextArea rows={3} />
+          </Form.Item>
+          <Form.Item name="thumbnail" label="Thumbnail">
+            <Upload.Dragger multiple>
+              <Space direction="vertical">
+                <Space>
+                  <UploadOutlined />
+                  <Typography.Text strong>Upload images</Typography.Text>
+                </Space>
+                <Typography.Text type="secondary">
+                  Drag and drop images here or click to upload.
+                </Typography.Text>
+              </Space>
+            </Upload.Dragger>
+          </Form.Item>
+          <Form.Item name="images" label="Media">
+            <Upload.Dragger multiple>
+              <Space direction="vertical">
+                <Space>
+                  <UploadOutlined />
+                  <Typography.Text strong>Upload images</Typography.Text>
+                </Space>
+                <Typography.Text type="secondary">
+                  Drag and drop images here or click to upload.
+                </Typography.Text>
+              </Space>
+            </Upload.Dragger>
+          </Form.Item>
+        </Card>
 
-                    return (
-                      <>
-                        {fields.map(({ key, name, ...restField }) => (
-                          <Card
-                            key={key}
-                            size="small"
-                            style={{
-                              backgroundColor: '#fafafa',
-                              marginTop: 16,
-                            }}
+        <Card title="Options">
+          <Form.List name="options">
+            {(fields, { add, remove }) => {
+              return (
+                <>
+                  {fields.map(({ key, name, ...restField }) => (
+                    <Card
+                      key={key}
+                      size="small"
+                      style={{
+                        backgroundColor: '#fafafa',
+                        marginTop: 16,
+                      }}
+                    >
+                      <Flex justify="space-between" align="center" gap={8}>
+                        <Space direction="vertical" style={{ width: '100%' }}>
+                          <Form.Item
+                            {...restField}
+                            layout="horizontal"
+                            name={[name, 'title']}
+                            label="Title"
+                            colon={false}
+                            style={{ marginBottom: 0 }}
+                            labelCol={{ span: 4 }}
+                            labelAlign="left"
+                            wrapperCol={{ span: 20 }}
+                            rules={[
+                              {
+                                required: true,
+                                message: 'Please enter a title',
+                              },
+                            ]}
                           >
-                            <Flex
-                              justify="space-between"
-                              align="center"
-                              gap={8}
-                            >
-                              <Space
-                                direction="vertical"
-                                style={{ width: '100%' }}
-                              >
-                                <Form.Item
-                                  {...restField}
-                                  layout="horizontal"
-                                  name={[name, 'title']}
-                                  label="Title"
-                                  colon={false}
-                                  style={{ marginBottom: 0 }}
-                                  labelCol={{ span: 4 }}
-                                  labelAlign="left"
-                                  wrapperCol={{ span: 20 }}
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: 'Please enter a title',
-                                    },
-                                  ]}
-                                >
-                                  <Input placeholder="Color" />
-                                </Form.Item>
-                                <Form.Item
-                                  {...restField}
-                                  layout="horizontal"
-                                  name={[name, 'values']}
-                                  label="Values"
-                                  colon={false}
-                                  style={{ marginBottom: 0 }}
-                                  labelCol={{ span: 4 }}
-                                  labelAlign="left"
-                                  wrapperCol={{ span: 20 }}
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: 'Please enter values',
-                                    },
-                                  ]}
-                                >
-                                  <Select
-                                    mode="tags"
-                                    tokenSeparators={[', ']}
-                                    placeholder="e.g. Red, Blue, Green"
-                                  />
-                                </Form.Item>
-                              </Space>
-                              <Button
-                                type="text"
-                                icon={<CloseOutlined />}
-                                onClick={() => remove(name)}
-                              />
-                            </Flex>
-                          </Card>
-                        ))}
-                      </>
-                    );
-                  }}
-                </Form.List>
-              </Card>
-              <Card title="Variants">
-                <Form.List name="variants">
-                  {() => {
-                    const columns = [
-                      {
-                        title: 'Default option',
-                        dataIndex: 'combinations',
-                        render: (_, __, index) => (
-                          <Form.Item name={[index, 'combinations']} noStyle>
-                            <Input disabled value={_.join(' / ')} />
+                            <Input placeholder="Color" />
                           </Form.Item>
-                        ),
-                      },
-                      {
-                        title: 'Title',
-                        dataIndex: 'title',
-                        render: (_, __, index) => (
-                          <Form.Item name={[index, 'title']} noStyle>
-                            <Input />
+                          <Form.Item
+                            {...restField}
+                            layout="horizontal"
+                            name={[name, 'values']}
+                            label="Values"
+                            colon={false}
+                            style={{ marginBottom: 0 }}
+                            labelCol={{ span: 4 }}
+                            labelAlign="left"
+                            wrapperCol={{ span: 20 }}
+                            rules={[
+                              {
+                                required: true,
+                                message: 'Please enter values',
+                              },
+                            ]}
+                          >
+                            <Select
+                              mode="tags"
+                              tokenSeparators={[', ']}
+                              placeholder="e.g. Red, Blue, Green"
+                            />
                           </Form.Item>
-                        ),
-                      },
-                      {
-                        title: 'SKU',
-                        render: (_, __, index) => (
-                          <Form.Item name={[index, 'sku']} noStyle>
-                            <Input />
-                          </Form.Item>
-                        ),
-                      },
-                      {
-                        title: 'Stock',
-                        render: (_, __, index) => (
-                          <Form.Item name={[index, 'stock']} noStyle>
-                            <InputNumber min={0} style={{ width: '100%' }} />
-                          </Form.Item>
-                        ),
-                      },
-                      {
-                        title: 'Price',
-                        render: (_, __, index) => (
-                          <Form.Item name={[index, 'price']} noStyle>
-                            <InputNumber min={0} style={{ width: '100%' }} />
-                          </Form.Item>
-                        ),
-                      },
-                      {
-                        title: 'Sale Price',
-                        render: (_, __, index) => (
-                          <Form.Item name={[index, 'sale_price']} noStyle>
-                            <InputNumber min={0} style={{ width: '100%' }} />
-                          </Form.Item>
-                        ),
-                      },
-                    ];
+                        </Space>
+                        <Button
+                          type="text"
+                          icon={<CloseOutlined />}
+                          onClick={() => remove(name)}
+                        />
+                      </Flex>
+                    </Card>
+                  ))}
+                  <Form.Item>
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      icon={<PlusOutlined />}
+                    >
+                      Add field
+                    </Button>
+                  </Form.Item>
+                </>
+              );
+            }}
+          </Form.List>
+        </Card>
+        <Card title="Variants">
+          <Form.List name="variants">
+            {() => {
+              const columns = [
+                {
+                  title: 'Default option',
+                  dataIndex: 'combinations',
+                  render: (_, __, index) => (
+                    <Form.Item name={[index, 'combinations']} noStyle>
+                      <Input disabled value={_.join(' / ')} />
+                    </Form.Item>
+                  ),
+                },
+                {
+                  title: 'Title',
+                  dataIndex: 'title',
+                  render: (_, __, index) => (
+                    <Form.Item name={[index, 'title']} noStyle>
+                      <Input />
+                    </Form.Item>
+                  ),
+                },
+                {
+                  title: 'SKU',
+                  render: (_, __, index) => (
+                    <Form.Item name={[index, 'sku']} noStyle>
+                      <Input />
+                    </Form.Item>
+                  ),
+                },
+                {
+                  title: 'Stock',
+                  render: (_, __, index) => (
+                    <Form.Item name={[index, 'stock']} noStyle>
+                      <InputNumber min={0} style={{ width: '100%' }} />
+                    </Form.Item>
+                  ),
+                },
+                {
+                  title: 'Price',
+                  render: (_, __, index) => (
+                    <Form.Item name={[index, 'price']} noStyle>
+                      <InputNumber min={0} style={{ width: '100%' }} />
+                    </Form.Item>
+                  ),
+                },
+                {
+                  title: 'Sale Price',
+                  render: (_, __, index) => (
+                    <Form.Item name={[index, 'sale_price']} noStyle>
+                      <InputNumber min={0} style={{ width: '100%' }} />
+                    </Form.Item>
+                  ),
+                },
+              ];
 
-                    return (
-                      <Table
-                        bordered
-                        dataSource={variants}
-                        columns={columns}
-                        pagination={false}
-                      />
-                    );
-                  }}
-                </Form.List>
-              </Card>
-            </Flex>
-          </Col>
-          <Col span={6}>
-            <Flex vertical gap={16}>
-              <Card title="Organize">
-                <Form.Item name="type_id" label="Type">
-                  <Select />
-                </Form.Item>
-                <Form.Item name="collection_id" label="Collection">
-                  <Select />
-                </Form.Item>
-                <Form.Item name="category_id" label="Category">
-                  <Select />
-                </Form.Item>
-                <Form.Item name="tags" label="Tags">
-                  <Select mode="multiple" />
-                </Form.Item>
-              </Card>
-              <Card title="Attributes">
-                <Form.Item name="weight" label="Weight">
-                  <InputNumber style={{ width: '100%' }} />
-                </Form.Item>
-                <Form.Item name="length" label="Weight">
-                  <InputNumber style={{ width: '100%' }} />
-                </Form.Item>
-                <Form.Item name="height" label="Height">
-                  <InputNumber style={{ width: '100%' }} />
-                </Form.Item>
-                <Form.Item name="width" label="Width">
-                  <InputNumber style={{ width: '100%' }} />
-                </Form.Item>
-                <Form.Item name="material" label="Material">
-                  <Input />
-                </Form.Item>
-              </Card>
-            </Flex>
-          </Col>
-        </Row>
-      </Form>
-    </Flex>
+              return (
+                <Table
+                  bordered
+                  dataSource={variants}
+                  columns={columns}
+                  pagination={false}
+                />
+              );
+            }}
+          </Form.List>
+        </Card>
+      </Flex>
+    </Form>
   );
 }

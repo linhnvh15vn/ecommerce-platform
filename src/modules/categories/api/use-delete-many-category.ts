@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { App } from 'antd';
 
 import { axios } from '@/api/axios.instance';
-import { App } from 'antd';
 
 const deleteManyCategory = async (ids: string[]) => {
   const response = await axios.post('/categories/delete-many', ids);

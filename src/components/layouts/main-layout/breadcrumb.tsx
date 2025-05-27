@@ -1,4 +1,4 @@
-import { Breadcrumb as AntBreadcrumb, type BreadcrumbProps } from 'antd';
+import { type BreadcrumbProps, Breadcrumb as AntBreadcrumb } from 'antd';
 import { Link, useLocation } from 'react-router';
 
 export default function Breadcrumb() {

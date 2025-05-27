@@ -1,5 +1,8 @@
+import { useState } from 'react';
+
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import {
+  type DescriptionsProps,
   Button,
   Card,
   Descriptions,
@@ -7,14 +10,13 @@ import {
   Flex,
   Space,
   Tag,
-  type DescriptionsProps,
 } from 'antd';
+import { useParams } from 'react-router';
 
 import { useDeleteProductOption } from '@/modules/products/api/use-delete-product-option';
 import ProductOptionDrawer from '@/modules/products/components/product-option-drawer';
+
 import type { ProductOption } from '@/modules/products/types/product-option.type';
-import { useState } from 'react';
-import { useParams } from 'react-router';
 
 type ProductOptionProps = {
   options: ProductOption[];

@@ -1,15 +1,16 @@
-import UpdateProductOverview from '@/modules/products/components/update-product-overview';
-import { useBoolean } from '@/shared/hooks/use-boolean';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import {
+  type DescriptionsProps,
   Button,
   Card,
   Descriptions,
   Divider,
   Space,
   Tag,
-  type DescriptionsProps,
 } from 'antd';
+
+import UpdateProductOverview from '@/modules/products/components/update-product-overview';
+import { useBoolean } from '@/shared/hooks/use-boolean';
 
 type ProductOverviewProps = {
   title: string;

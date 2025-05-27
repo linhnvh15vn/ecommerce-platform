@@ -1,6 +1,12 @@
+import { EditOutlined } from '@ant-design/icons';
+import { type DescriptionsProps, Button, Card, Descriptions, Tag } from 'antd';
+
+import { useBoolean } from '@/shared/hooks/use-boolean';
+
+import UpdateProductOrganizeDrawer from './update-product-organize-drawer';
+
 import type { ProductTag } from '@/modules/products/types/product-tag.type';
 import type { ProductType } from '@/modules/products/types/product-type.type';
-import { Card, Descriptions, type DescriptionsProps } from 'antd';
 
 type ProductOrganizeProps = {
   tags: ProductTag[];
@@ -15,10 +21,13 @@ export default function ProductOrganize({
   collection,
   category,
 }: ProductOrganizeProps) {
+  const { value, setTrue, setFalse } = useBoolean();
   const items: DescriptionsProps['items'] = [
     {
       label: 'Tags',
-      children: tags.map((tag) => (tag ? `#${tag.tag.value}` : '-')), // fix
+      children: tags.map((tag) =>
+        tag ? <Tag key={tag.tag.id}>#{tag.tag.value}</Tag> : '-'
+      ), // fix
     },
     {
       label: 'Type',
@@ -35,8 +44,21 @@ export default function ProductOrganize({
   ];
 
   return (
-    <Card title="Organize">
+    <Card
+      title="Organize"
+      extra={<Button type="link" icon={<EditOutlined />} onClick={setTrue} />}
+    >
       <Descriptions column={1} bordered items={items} />
+      <UpdateProductOrganizeDrawer
+        open={value}
+        data={{
+          tag_ids: tags.map((tag) => tag.tag.id),
+          type_id: type?.id,
+          collection_id: collection?.id,
+          category_id: category?.id,
+        }}
+        onClose={setFalse}
+      />
     </Card>
   );
 }

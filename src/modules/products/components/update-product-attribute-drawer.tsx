@@ -1,8 +1,9 @@
 import { useId } from 'react';
 
-import { useUpdateProduct } from '@/modules/products/api/use-update-product';
 import { Button, Drawer, Form, Input, InputNumber, Space } from 'antd';
 import { useParams } from 'react-router';
+
+import { useUpdateProduct } from '@/modules/products/api/use-update-product';
 
 type UpdateProductAttributeDrawerProps = {
   open: boolean;

@@ -1,7 +1,9 @@
-import { axios } from '@/api/axios.instance';
-import type { UpdateProduct } from '@/modules/products/types/update-product.type';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { App } from 'antd';
+
+import { axios } from '@/api/axios.instance';
+
+import type { UpdateProduct } from '@/modules/products/types/update-product.type';
 
 const updateProduct = async (data: UpdateProduct) => {
   const response = await axios.patch(`/products/${data.id}`, data);

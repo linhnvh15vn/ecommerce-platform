@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { useGetCategories } from '@/modules/categories/api/use-get-categories';
 import CategoryTable from '@/modules/categories/components/category-table';
+
 import type { QueryCategory } from '@/modules/categories/types/query-category.type';
 
 export default function CategoryList() {

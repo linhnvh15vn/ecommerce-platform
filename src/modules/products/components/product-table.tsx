@@ -1,21 +1,23 @@
+import { type Key, useState } from 'react';
+
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import {
+  type TableProps,
   App,
   Button,
   Card,
   Divider,
   Space,
   Table,
-  type TableProps,
 } from 'antd';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router';
 
 import { DATE_FORMAT, PAGE_SIZE_OPTIONS } from '@/constants';
 import CreateProductModal from '@/modules/products/components/create-product-modal';
-import type { Product } from '@/modules/products/types/product.type';
 import { useBoolean } from '@/shared/hooks/use-boolean';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { useState, type Key } from 'react';
-import { useNavigate } from 'react-router';
+
+import type { Product } from '@/modules/products/types/product.type';
 
 type ProductTableProps = {
   data: Product[];
@@ -36,7 +38,6 @@ export default function ProductTable({
   const { modal } = App.useApp();
   const navigate = useNavigate();
   const { value, setTrue, setFalse } = useBoolean(false);
-  const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const columns: TableProps<Product>['columns'] = [
     {
       title: 'Product',
@@ -106,10 +107,6 @@ export default function ProductTable({
         columns={columns}
         dataSource={data}
         loading={isLoading}
-        rowSelection={{
-          selectedRowKeys,
-          onChange: (keys) => setSelectedRowKeys(keys),
-        }}
         onRow={(data) => ({
           onClick: () => navigate(`/products/${data.id}`),
         })}
@@ -119,8 +116,6 @@ export default function ProductTable({
           pageSize,
           pageSizeOptions: PAGE_SIZE_OPTIONS,
           showSizeChanger: true,
-          showTotal: (total, range) =>
-            `${range[0]} - ${range[1]} of ${total} results`,
         }}
       />
       <CreateProductModal open={value} onCancel={setFalse} />

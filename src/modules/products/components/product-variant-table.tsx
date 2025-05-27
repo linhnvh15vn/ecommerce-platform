@@ -1,17 +1,24 @@
-import { DATE_FORMAT } from '@/constants';
-import type { ProductOption } from '@/modules/products/types/product-option.type';
-import type { ProductVariant } from '@/modules/products/types/product-variant.type';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { useState } from 'react';
+
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import {
+  type TableProps,
   Button,
   Card,
   Divider,
   Space,
   Table,
   Tag,
-  type TableProps,
 } from 'antd';
 import dayjs from 'dayjs';
+
+import { DATE_FORMAT } from '@/constants';
+import { useBoolean } from '@/shared/hooks/use-boolean';
+
+import UpdateProductVariantDrawer from './update-product-variant-drawer';
+
+import type { ProductOption } from '@/modules/products/types/product-option.type';
+import type { ProductVariant } from '@/modules/products/types/product-variant.type';
 
 type ProductVariantTableProps = {
   variants: ProductVariant[];
@@ -22,6 +29,8 @@ export default function ProductVariantTable({
   variants,
   options,
 }: ProductVariantTableProps) {
+  const { value, setTrue, setFalse } = useBoolean();
+  const { data, setData } = useState();
   const columns: TableProps<ProductVariant>['columns'] = [
     {
       title: 'Title',
@@ -35,7 +44,7 @@ export default function ProductVariantTable({
       title: option.title,
       render: (_, record) => {
         const a = record.option_variants.find(
-          (optionVariant) => optionVariant.option_value.option_id === option.id,
+          (optionVariant) => optionVariant.option_value.option_id === option.id
         );
 
         return <Tag>{a ? a.option_value.value : '-'}</Tag>;
@@ -59,7 +68,7 @@ export default function ProductVariantTable({
       align: 'end',
       render: (_, record) => (
         <Space split={<Divider type="vertical" />}>
-          <Button type="link" icon={<EditOutlined />} />
+          <Button type="link" icon={<EditOutlined />} onClick={setTrue} />
           <Button type="link" icon={<DeleteOutlined />} />
         </Space>
       ),
@@ -67,8 +76,21 @@ export default function ProductVariantTable({
   ];
 
   return (
-    <Card title="Variants">
-      <Table columns={columns} dataSource={variants} />
+    <Card
+      title="Variants"
+      extra={
+        <Button icon={<PlusOutlined />} onClick={setTrue}>
+          Create
+        </Button>
+      }
+    >
+      <Table rowKey="id" columns={columns} dataSource={variants} />
+      <UpdateProductVariantDrawer
+        open={value}
+        options={options}
+        data={{}}
+        onClose={setFalse}
+      />
     </Card>
   );
 }

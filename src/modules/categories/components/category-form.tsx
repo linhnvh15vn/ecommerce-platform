@@ -1,6 +1,8 @@
-import { useCreateCategory } from '@/modules/categories/api/use-create-category';
-import type { CreateCategory } from '@/modules/categories/types/create-category.type';
 import { Form, Input, Modal, Select } from 'antd';
+
+import { useCreateCategory } from '@/modules/categories/api/use-create-category';
+
+import type { CreateCategory } from '@/modules/categories/types/create-category.type';
 
 type CategoryFormProps = {
   open: boolean;

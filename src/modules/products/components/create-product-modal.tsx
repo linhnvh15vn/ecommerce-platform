@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import {
   CloseOutlined,
   MinusCircleOutlined,
@@ -5,6 +7,7 @@ import {
   UploadOutlined,
 } from '@ant-design/icons';
 import {
+  type TabsProps,
   Button,
   Card,
   Col,
@@ -16,11 +19,11 @@ import {
   Row,
   Select,
   Space,
+  Steps,
   Switch,
   Tabs,
   Typography,
   Upload,
-  type TabsProps,
 } from 'antd';
 
 type CreateProductModalProps = {
@@ -28,172 +31,116 @@ type CreateProductModalProps = {
   onCancel: () => void;
 };
 
+const { Step } = Steps;
+
 export default function CreateProductModal({
   open,
   onCancel,
 }: CreateProductModalProps) {
-  const items: TabsProps['items'] = [
+  const [form] = Form.useForm();
+  const [current, setCurrent] = useState(0);
+  const steps = [
     {
-      key: 'details',
-      label: 'Details',
-      children: <ProductDetailsForm />,
+      title: 'First Name',
+      content: <Form1 />,
     },
     {
-      key: 'organize',
-      label: 'Organize',
+      title: 'Last Name',
+      content: <Form2 />,
     },
     {
-      key: 'variants',
-      label: 'Variants',
+      title: 'Email',
+      content: <Form3 />,
     },
   ];
+  const next = () => {
+    form
+      .validateFields()
+      .then(() => {
+        setCurrent(current + 1);
+      })
+      .catch(() => {});
+  };
+
+  const prev = () => {
+    setCurrent(current - 1);
+  };
+
+  const onFinish = (values: any) => {
+    console.log('Final values:', values);
+    // message.success('Form submitted successfully!');
+  };
 
   return (
     <Modal open={open} onCancel={onCancel} width={840}>
-      <Tabs items={items} />
+      <div style={{ maxWidth: 400, margin: '0 auto' }}>
+        <Steps current={current} style={{ marginBottom: 24 }}>
+          {steps.map((item) => (
+            <Step key={item.title} title={item.title} />
+          ))}
+        </Steps>
+
+        <Form form={form} onFinish={onFinish} layout="vertical">
+          {steps[current].content}
+
+          <div style={{ marginTop: 24 }}>
+            {current > 0 && (
+              <Button style={{ marginRight: 8 }} onClick={prev}>
+                Previous
+              </Button>
+            )}
+            {current < steps.length - 1 && (
+              <Button type="primary" onClick={next}>
+                Next
+              </Button>
+            )}
+            {current === steps.length - 1 && (
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            )}
+          </div>
+        </Form>
+      </div>
     </Modal>
   );
 }
 
-const ProductDetailsForm = () => {
-  let addFunc;
-
+const Form1 = () => {
   return (
-    <Form layout="vertical">
-      <Row gutter={16}>
-        <Col span={24}>
-          <Form.Item name="title" label="Title">
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col span={24}>
-          <Form.Item name="description" label="Description">
-            <Input.TextArea rows={3} />
-          </Form.Item>
-        </Col>
-        <Col span={24}>
-          <Form.Item name="images" label="Media">
-            <Upload.Dragger multiple>
-              <Space direction="vertical">
-                <Space>
-                  <UploadOutlined />
-                  <Typography.Text strong>Upload images</Typography.Text>
-                </Space>
-                <Typography.Text type="secondary">
-                  Drag and drop images here or click to upload.
-                </Typography.Text>
-              </Space>
-            </Upload.Dragger>
-          </Form.Item>
-        </Col>
-        <Col span={24}>
-          <Divider />
-        </Col>
-        <Col span={24}>
-          <Form.Item label="Variants">
-            <Card>
-              <Space align="baseline" size="large">
-                <Switch size="small" />
-                <Space direction="vertical">
-                  <Typography.Text strong>
-                    Yes, this is a product with variants
-                  </Typography.Text>
-                  <Typography.Text type="secondary">
-                    When unchecked, we will create a default variant for you
-                  </Typography.Text>
-                </Space>
-              </Space>
-            </Card>
-          </Form.Item>
-        </Col>
-        <Col span={24}>
-          <Card
-            title="Product options"
-            extra={
-              <Button
-                type="dashed"
-                onClick={() => addFunc?.()}
-                icon={<PlusOutlined />}
-              >
-                Add
-              </Button>
-            }
-          >
-            <Form.List name="options">
-              {(fields, { add, remove }) => {
-                addFunc = add;
+    <Form.Item
+      name="firstName"
+      label="First Name"
+      rules={[{ required: true, message: 'Please input your first name!' }]}
+    >
+      <Input placeholder="Enter first name" />
+    </Form.Item>
+  );
+};
 
-                return (
-                  <>
-                    {fields.map(({ key, name, ...restField }) => (
-                      <Card
-                        key={key}
-                        size="small"
-                        style={{
-                          backgroundColor: '#fafafa',
-                          marginTop: 16,
-                        }}
-                      >
-                        <Flex justify="space-between" align="center" gap={8}>
-                          <Space direction="vertical" style={{ width: '100%' }}>
-                            <Form.Item
-                              {...restField}
-                              layout="horizontal"
-                              name={[name, 'title']}
-                              label="Title"
-                              colon={false}
-                              style={{ marginBottom: 0 }}
-                              labelCol={{ span: 4 }}
-                              labelAlign="left"
-                              wrapperCol={{ span: 20 }}
-                              rules={[
-                                {
-                                  required: true,
-                                  message: 'Please enter a title',
-                                },
-                              ]}
-                            >
-                              <Input placeholder="Color" />
-                            </Form.Item>
-                            <Form.Item
-                              {...restField}
-                              layout="horizontal"
-                              name={[name, 'values']}
-                              label="Values"
-                              colon={false}
-                              style={{ marginBottom: 0 }}
-                              labelCol={{ span: 4 }}
-                              labelAlign="left"
-                              wrapperCol={{ span: 20 }}
-                              rules={[
-                                {
-                                  required: true,
-                                  message: 'Please enter values',
-                                },
-                              ]}
-                            >
-                              <Select
-                                mode="tags"
-                                tokenSeparators={[', ']}
-                                placeholder="e.g. Red, Blue, Green"
-                              />
-                            </Form.Item>
-                          </Space>
-                          <Button
-                            type="text"
-                            icon={<CloseOutlined />}
-                            onClick={() => remove(name)}
-                          />
-                        </Flex>
-                      </Card>
-                    ))}
-                  </>
-                );
-              }}
-            </Form.List>
-          </Card>
-        </Col>
-      </Row>
-    </Form>
+const Form2 = () => {
+  return (
+    <Form.Item
+      name="lastName"
+      label="Last Name"
+      rules={[{ required: true, message: 'Please input your last name!' }]}
+    >
+      <Input placeholder="Enter last name" />
+    </Form.Item>
+  );
+};
+
+const Form3 = () => {
+  return (
+    <Form.Item
+      name="email"
+      label="Email"
+      rules={[
+        { required: true, message: 'Please input your email!' },
+        { type: 'email', message: 'The input is not a valid email!' },
+      ]}
+    >
+      <Input placeholder="Enter email" />
+    </Form.Item>
   );
 };
